@@ -13,12 +13,7 @@ default_args = {
 
 dag = DAG('mysql_to_gcs', default_args=default_args)
 
-t1 = BashOperator(
-    task_id='print_date',
-    bash_command='date',
-    dag=dag)
-
-t2 = MySqlToGoogleCloudStorageOperator(
+export_actor = MySqlToGoogleCloudStorageOperator(
     task_id='extract_actors',
     mysql_conn_id='sakila_test',
     google_cloud_storage_conn_id='gcp_test',
@@ -27,5 +22,3 @@ t2 = MySqlToGoogleCloudStorageOperator(
     filename='sakila/actors/actors{}.json',
     schema_filename='sakila/schemas/actors.json',
     dag=dag)
-
-t2.set_upstream(t1)

@@ -183,14 +183,14 @@ form the command line.
 # Hands On Exercises :weight_lifting_man:
 The first real DAG I want to make is one that exports data from a MySQL Database and dumps it into Google Cloud Storage.
 
-## Setup
+## Creating a MySQL to Google Cloud Storage DAG
+### Setup
 To setup for this exercise, I first needed to create some infrastructure to simulate an operational system I could do some ETL on. My setup looked like this:
 
 1. A MySQL database using GCP's SQL which I loaded MySQL's "sakila" database into (see `sakila-database.sql` for the dump file I imported into my instance)
 2. A Google Cloud Storage Bucket I could dump some data into
-3. A BigQuery dataset I could load some data into
 
-## Creating MySQL to GCS to BigQuery DAG
+### Instructions
 The first task is to demonstrate that I could use the `MySqlToGoogleCloudStorageOperator` to export data from MySQL to a GCS bucket. I crafted this simple DAG `mysql_to_gcs.py`.
 
 There is some backend configuration work to do before this DAG will run.
@@ -217,8 +217,81 @@ Password: airflow_password
   Scopes (comma seperated): https://www.googleapis.com/auth/cloud-platform
   ```
 
-Second, install MySQL dependacies on the airflow instance:
+3. Install MySQL dependacies on the airflow instance:
 ```
 sudo apt-get install python-mysqldb
 pip install pymysql
 ```
+
+4. Create the `mysql_to_gcs.py` DAG in `~/airflow/dags` (find code in `./dags`)
+
+5. Test for python compilation to make sure you don't have any syntax errors:
+```
+cd ~/airflow/dags
+python mysql_to_gcs.py
+```
+
+6. Now test run the task using airflow. This will actually execute a DAG task as if it were running in airflow so expect to see a file created in the bucket you're using:
+```
+airflow test mysql_to_gcs.py extract_actor 08-11-2017
+```
+
+7. Once you've tested it, you're all set!
+
+## Creating a DAG to Extract multple tables from multiple MySQL databases to BigQuery
+In this exercise, we'll pull data from two MySQL databases and dump it to GCS then load it from GCS to BigQuery.
+### Setup
+To setup for this exercise, I first needed to create some infrastructure to simulate an operational system I could do some ETL on. My setup looked like this:
+
+1. Create your first MySQL database (`sakila_1`) using GCP's SQL which you will loaded MySQL's "sakila" database into (see `sakila-database.sql` for the dump file I imported into my instance)
+1. Create your second MySQL database (`sakila_2`) using GCP's SQL which you will loaded MySQL's "sakila" database into (see `sakila-database.sql` for the dump file I imported into my instance)
+2. Create a Google Cloud Storage Bucket you could dump some data into
+4. Create a BigQuery Dataset for `sakila_1` and `sakila_2` (could probably make one dataset now that I think about it)
+
+### Instructions
+1. Create two  MySQL connection:
+```
+Conn Id: sakila_1
+Conn Type: MySQL
+Host: 10.10.10.10
+Schema: sakila
+Login: airflow
+Password: airflow_password
+```
+```
+Conn Id: sakila_2
+Conn Type: MySQL
+Host: 10.10.10.11
+Schema: sakila
+Login: airflow
+Password: airflow_password
+```
+2. Create a GCP connection
+  1. Create a Service Account and download the credentials you need, save them to somewhere on the airflow instance. I put mine in `/etc/gcp/creds.json`
+  2. Setup the connections:
+  ```
+  Conn Id: gcp_test
+  Conn Type: Google Cloud Platform
+  Project Id: my-gcp-project-id-00000
+  Keyfile Path: /etc/gcp/creds.json
+  Scopes (comma seperated): https://www.googleapis.com/auth/cloud-platform
+  ```
+3. Create the `sakila_main_tables.py` DAG in `~/airflow/dags` (find code in `./dags`)
+
+4. Test for python compilation to make sure you don't have any syntax errors:
+```
+cd ~/airflow/dags
+python sakila_main_tables.py
+```
+
+5. Now test run the two main tasks using airflow. This will actually execute a DAG task as if it were running in airflow so expect to see a file created in the bucket and a table created in BigQuery when you get a success:
+```
+airflow test sakila_main_tables.py extract_mysql_sakila_1_actor 08-11-2017
+airflow test sakila_main_tables.py load_bq_sakila_1_actor 08-11-2017
+```
+
+# Future Works, To Do Items
+- [ ] Add `eth_rates.py` exercise with an example showing how to use `plugins`
+- [ ] Figure out Encryption for connections
+- [ ] Document setting up for `CeleryExecutor`
+- [ ] Include instructions for setting up `systemd`
