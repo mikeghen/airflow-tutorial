@@ -83,6 +83,11 @@ airflow scheduler
 ## Integration with systemd
 :pencil: http://pythonhosted.org/airflow/configuration.html#integration-with-systemd
 
+# Sponsorship Message
+Excuse this interruption but, future improvements on this tutorial are sponsored by:
+<a href="https://tracking.gitads.io/?campaign=gitads&repo=airflow-tutorial&redirect=gitads.io" rel="gitads">![GitAds](./images/sponser_banner.png)</a>
+
+
 ## Security
 ### User Access Control
 One of my concerns was user access controls so after the install I jumped down to the [Security](http://pythonhosted.org/airflow/security.html?highlight=users) portion of the Airflow Documentation. Per the docs:
@@ -295,3 +300,7 @@ airflow test sakila_main_tables.py load_bq_sakila_1_actor 08-11-2017
 - [ ] Figure out Encryption for connections
 - [ ] Document setting up for `CeleryExecutor`
 - [ ] Include instructions for setting up `systemd`
+
+# Sponsorship Message
+Future works coming soon thanks to my sponsor:
+<a href="https://tracking.gitads.io/?campaign=gitads&repo=airflow-tutorial&redirect=gitads.io" rel="gitads">![GitAds](./images/sponser_banner.png)</a>
