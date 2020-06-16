@@ -1,30 +1,30 @@
 # Airflow Tutorial
 This documents some of the work I did getting started with Airflow on Google Cloud Platform.
 
-:warning: Work in progress :pencil:
-
 ## About this Tutorial
-I found the tutorial within the Airflow Documentation to be sparse and I also found that in order to achieve what I was trying to do, I'd have to just read all the documentation. The purpose of this tutorial is to help others get started with Airflow without reading all the documentation. _I'd still recommend reading all the documentation at some point_ but if all you're trying to do is use Airflow to move data from an RDBMS like MySQL or Postgres, this is a great place to start.
+I found the tutorial within the Airflow Documentation to be sparse. I also found that in order to achieve what I was trying to do, I'd have to just read all the documentation.
 
-In this tutorial, I will walk you through setting up Airflow on Google Cloud Platform. I will cover creating a data flow that moves data from MySQL to BigQuery. My goal is to make this tutorial comprehensive enough so that it can be used to configure a production Airflow deployment.  
+The purpose of this tutorial is to help others get started with Airflow without reading all the documentation. _I'd still recommend reading all the documentation at some point_ but if all you're trying to do is use Airflow to move data from an RDBMS like MySQL or Postgres, this is a great place to start.
+
+In this tutorial, I will walk you through setting up Airflow on Google Cloud Platform. I will cover creating a data flow that moves data from MySQL to BigQuery. My goal is to make this tutorial comprehensive enough so that it can be used to configure a production Airflow deployment. :warning: It's not quite there yet but getting closer.
 
 # Setup
-I'm using Google Cloud Platform for hosting. The end goal here is to take data from 5 MySQL databases and load it into Google BigQuery.
+I'm using Google Cloud Platform for hosting but you should be able to provision Airflow using these instructions on any Ubuntu instance.
 
 ## Installation
-I installed Airflow on an instance using Compute Engine (using Ubuntu 16 OS). The installation was pretty trivial simply:
+I installed Airflow on an instance using Compute Engine (using Ubuntu 16 OS). The installation was:
 ```
-export AIRFLOW_HOME=~/airflow
-pip install airflow
-airflow initdb
-airflow webserver -p 8080
+sudo apt-get -y update
+sudo apt-get -y install python3-pip libmysqlclient-dev
+sudo SLUGIFY_USES_TEXT_UNIDECODE=yes pip3 install apache-airflow[mysql,gcp_api]     
 ```
-and I was up and running. You can find [more on the installation in the Airflow Documentation](http://pythonhosted.org/airflow/installation.html).
+If you intend to use other systems for your DAGs (like postgres) you will need to install [Extra Packages](https://airflow.apache.org/installation.html#extra-packages)
+
 
 ### About the Installation
-Airflow is install as a Python package and all the configuration files are stored in `~/airflow`.
+Airflow is install as a Python package and all the configuration files are stored in `AIRFLOW_HOME`. You can export `AIRFLOW_HOME` manually, we will use `AIRFLOW_HOME=/opt/airflow`
 
-The primary file you need to know of is `~/airflow/airflow.cfg` which stores the configuration information for Airflow. I will edit those in the next section to setup Security.
+The primary file you need to know of is `/opt/airflow/airflow.cfg` which stores the configuration information for Airflow. I will edit those in the next section to setup Security.
 
 Airflow is a [Flask](http://flask.pocoo.org/) application by the way.
 
