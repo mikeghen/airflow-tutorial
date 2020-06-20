@@ -84,9 +84,9 @@ airflow scheduler
 :pencil: http://pythonhosted.org/airflow/configuration.html#integration-with-systemd
 
 # Sponsorship Message
-Excuse this interruption but, future improvements on this tutorial are sponsored by:
-<a href="https://tracking.gitads.io/?campaign=gitads&repo=airflow-tutorial&redirect=gitads.io" rel="gitads">![GitAds](./images/sponser_banner.png)</a>
-
+Excuse this interruption but, future improvements on this tutorial are sponsored by PopSQL. You can use them to collaborate your SQL!
+<a href="https://tracking.gitads.io/?campaign=popsql&repo=airflow-tutorial&redirect=popsql.com%2F%3Futm_source%3Dgitads" rel="gitads">![GitAds](./images/sponser_banner.png)</a>
+<br><i>This advert was placed by <a href="https://tracking.gitads.io/?campaign=gitads&repo=airflow-tutorial&redirect=gitads.io" rel="gitads">GitAds</a> </i>
 
 ## Security
 ### User Access Control
